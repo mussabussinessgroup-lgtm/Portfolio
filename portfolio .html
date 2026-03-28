@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mussa Challenges | Developer Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Roboto', sans-serif; }
+    body { background: #f5f7ff; color: #333; line-height: 1.6; scroll-behavior: smooth; }
+    a { text-decoration: none; }
+    section { padding: 60px 20px; opacity: 0; transform: translateY(30px); transition: all 0.8s ease; }
+    section.visible { opacity: 1; transform: translateY(0); }
+    h1, h2, h3 { margin-bottom: 20px; }
+    .container { max-width: 1100px; margin: auto; text-align: center; }
+
+    /* Hero Section */
+    #hero {
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      color: #fff;
+      padding: 120px 20px;
+    }
+    #hero h1 { font-size: 48px; margin-top: 20px; }
+    #hero p { font-size: 20px; margin: 15px 0; }
+    #hero .btn {
+      padding: 12px 30px;
+      background: #fff;
+      color: #2575fc;
+      border-radius: 30px;
+      font-weight: bold;
+      display: inline-block;
+      margin-top: 20px;
+      transition: 0.3s;
+    }
+    #hero .btn:hover { background: #ff4c60; color: #fff; transform: scale(1.05); }
+
+    /* Profile photo */
+    .profile-photo {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 4px solid #fff;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .profile-photo:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* Typing Cursor */
+    .cursor { display: inline-block; background-color: #fff; width: 2px; animation: blink 0.7s infinite; }
+    @keyframes blink { 0%,50%,100% {opacity:1;} 25%,75% {opacity:0;} }
+
+    /* About Section */
+    #about p { max-width: 700px; margin: auto; font-size: 18px; text-align: center; }
+
+    /* Projects Section */
+    #projects { background: #f0f4ff; }
+    .project-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+    }
+    .project-card:hover { transform: translateY(-10px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
+    .project-card h3 { color: #2575fc; }
+    .project-card p { margin: 10px 0; }
+    .project-card .demo-btn {
+      padding: 8px 18px;
+      background: #2575fc;
+      color: #fff;
+      border-radius: 25px;
+      font-weight: bold;
+      transition: 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 10px;
+    }
+    .project-card .demo-btn:hover { background: #6a11cb; transform: scale(1.05); }
+
+    /* Skills Section */
+    #skills { max-width: 800px; margin: auto; }
+    #skills h2 { text-align: center; margin-bottom: 40px; color: #2575fc; font-size: 36px; }
+    .skill { margin-bottom: 20px; text-align: left; }
+    .skill span { font-weight: bold; display: block; margin-bottom: 8px; font-size: 18px; }
+    .skill-bar { width: 100%; background: #e0e0e0; border-radius: 25px; overflow: hidden; height: 25px; }
+    .skill-fill {
+      height: 100%;
+      width: 0;
+      color: #fff;
+      font-weight: bold;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding-right: 10px;
+      border-radius: 25px;
+      transition: width 2s ease;
+    }
+    .skill-fill.html { background: #f16529; }
+    .skill-fill.css { background: #2965f1; }
+    .skill-fill.js { background: #f0db4f; color: #333; }
+    .skill-fill.vue { background: #42b883; }
+    .skill-fill.bootstrap { background: #7952b3; }
+    .skill-fill.python { background: #306998; }
+    .skill-fill.php { background: #777bb4; }
+    .skill-fill.node { background: #68a063; }
+    .skill-fill.flutter { background: #02569b; }
+
+    /* Contact Section */
+    #contact { background: #f0f4ff; text-align: center; }
+    #contact p { margin: 10px 0; font-size: 18px; }
+    #contact a { display: inline-block; margin-top: 10px; color: #2575fc; }
+
+    /* Footer */
+    footer { text-align: center; padding: 20px; background: #6a11cb; color: #fff; }
+
+    /* Back to top button */
+    #topBtn {
+      display: none;
+      position: fixed;
+      bottom: 100px;
+      right: 30px;
+      z-index: 99;
+      font-size: 18px;
+      border: none;
+      outline: none;
+      background-color: #ff4c60;
+      color: white;
+      cursor: pointer;
+      padding: 12px 18px;
+      border-radius: 50px;
+      transition: 0.3s;
+    }
+    #topBtn:hover { background-color: #2575fc; }
+
+    /* Profile photo modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      padding-top: 80px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.8);
+    }
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+    }
+    .close {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover { color: #ff4c60; }
+
+    /* WhatsApp floating button */
+    .whatsapp-btn {
+      position: fixed;
+      bottom: 30px;
+      left: 30px;
+      z-index: 1000;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: #25d366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .whatsapp-btn img { width: 35px; height: 35px; }
+    .whatsapp-btn:hover { transform: scale(1.1); box-shadow: 0 8px 25px rgba(0,0,0,0.4); }
+
+    /* Responsive */
+    @media(max-width:768px){
+      #hero h1 { font-size: 36px; }
+      #hero p { font-size: 16px; }
+      .profile-photo { width: 120px; height: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hero Section -->
+  <section id="hero" class="visible">
+    <div class="container">
+      <img src="mussa.png" alt="Mussa Challenges" class="profile-photo" id="profilePhoto">
+      <h1>Mussa Challenges</h1>
+      <p>Web and Mobile App Developer</p>
+      <p><em>"Building the future, one app at a time."</em></p>
+      <p>I build <span id="typed-text"></span><span class="cursor">|</span></p>
+      <a href="#contact" class="btn">Contact Me</a>
+    </div>
+  </section>
+
+  <!-- Modal for Profile Photo -->
+  <div id="photoModal" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="modalImg" src="your-photo.jpg" alt="Mussa Challenges Full Photo">
+  </div>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="container">
+      <h2>About Me</h2>
+      <p>
+        Hi! I’m <strong>Mussa Challenges</strong>, a passionate web and mobile app developer. I build modern, user-friendly applications using HTML, CSS, JavaScript, Python, PHP, Vue.js, Flutter, Node.js, and Bootstrap. My goal is to create apps that make life easier and help businesses grow.
+      </p>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects">
+    <div class="container">
+      <h2>Projects</h2>
+      <div class="project-card">
+        <h3>MBG</h3>
+        <p><strong>Type:</strong> Business platform</p>
+        <p><strong>Description:</strong> A platform where users can view services posted by the business.</p>
+        <p><strong>Technologies:</strong> HTML, CSS, JavaScript, PHP, Vue.js, Bootstrap</p>
+        <p><strong>Features:</strong> Viewing services</p>
+        <a href="testing.html" class="demo-btn" target="_blank">Live Demo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills">
+    <div class="container">
+      <h2>Skills</h2>
+      <!-- Skill Bars -->
+      <div class="skill"><span>HTML</span><div class="skill-bar"><div class="skill-fill html" data-percentage="95%">95%</div></div></div>
+      <div class="skill"><span>CSS</span><div class="skill-bar"><div class="skill-fill css" data-percentage="90%">90%</div></div></div>
+      <div class="skill"><span>JavaScript</span><div class="skill-bar"><div class="skill-fill js" data-percentage="85%">85%</div></div></div>
+      <div class="skill"><span>Vue.js</span><div class="skill-bar"><div class="skill-fill vue" data-percentage="80%">80%</div></div></div>
+      <div class="skill"><span>Bootstrap</span><div class="skill-bar"><div class="skill-fill bootstrap" data-percentage="90%">90%</div></div></div>
+      <div class="skill"><span>Python</span><div class="skill-bar"><div class="skill-fill python" data-percentage="85%">85%</div></div></div>
+      <div class="skill"><span>PHP</span><div class="skill-bar"><div class="skill-fill php" data-percentage="80%">80%</div></div></div>
+      <div class="skill"><span>Node.js</span><div class="skill-bar"><div class="skill-fill node" data-percentage="75%">75%</div></div></div>
+      <div class="skill"><span>Flutter</span><div class="skill-bar"><div class="skill-fill flutter" data-percentage="70%">70%</div></div></div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="container">
+      <h2>Contact Me</h2>
+      <p>Email: <a href="mailto:mussabusinessgroup@gmail.com">mussabusinessgroup@gmail.com</a></p>
+      <p>Phone: <a href="tel:+250796491086">+250 796 491 086</a></p>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Mussa Challenges. All rights reserved.
+  </footer>
+
+  <!-- Back to top button -->
+  <button onclick="topFunction()" id="topBtn" title="Go to top">↑</button>
+
+  <!-- WhatsApp Floating Button -->
+  <a href="https://wa.me/250796491086" target="_blank" class="whatsapp-btn" title="Message me on WhatsApp">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo">
+  </a>
+
+  <script>
+    // Section animations
+    const sections = document.querySelectorAll('section:not(#hero)');
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){ entry.target.classList.add('visible'); obs.unobserve(entry.target); }
+      });
+    }, { threshold: 0.2 });
+    sections.forEach(section => observer.observe(section));
+
+    // Back to top
+    const topBtn = document.getElementById("topBtn");
+    window.onscroll = function() {scrollFunction()};
+    function scrollFunction() {
+      if(document.body.scrollTop > 200 || document.documentElement.scrollTop > 200){ topBtn.style.display="block"; }
+      else { topBtn.style.display="none"; }
+    }
+    function topFunction(){ document.body.scrollTop=0; document.documentElement.scrollTop=0; }
+
+    // Typing effect
+    const skills = ["HTML","CSS","JavaScript","Vue.js","Bootstrap","Python","PHP","Node.js","Flutter"];
+    let i=0,j=0,isDeleting=false,currentSkill='';
+    const typedText = document.getElementById("typed-text");
+    function type() {
+      if(i>=skills.length)i=0;
+      currentSkill = skills[i];
+      if(isDeleting){ typedText.textContent=currentSkill.substring(0,j--); if(j<0){isDeleting=false;i++;} }
+      else { typedText.textContent=currentSkill.substring(0,j++); if(j>currentSkill.length){isDeleting=true;j=currentSkill.length;} }
+      setTimeout(type,isDeleting?200:600);
+    }
+    type();
+
+    // Profile modal
+    const modal=document.getElementById("photoModal");
+    const img=document.getElementById("profilePhoto");
+    const modalImg=document.getElementById("modalImg");
+    const span=document.getElementsByClassName("close")[0];
+    img.onclick=function(){ modal.style.display="block"; modalImg.src=this.src; }
+    span.onclick=function(){ modal.style.display="none"; }
+    window.onclick=function(event){ if(event.target==modal){ modal.style.display="none"; } }
+
+    // Animate skill bars
+    const skillSection = document.getElementById('skills');
+    const skillBars = document.querySelectorAll('.skill-fill');
+    const skillObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          skillBars.forEach(bar=>{ bar.style.width=bar.getAttribute('data-percentage'); });
+          observer.unobserve(skillSection);
+        }
+      });
+    }, { threshold: 0.3 });
+    skillObserver.observe(skillSection);
+  </script>
+</body>
+</html>
